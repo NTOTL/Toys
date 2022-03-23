@@ -11,12 +11,33 @@ namespace Toys
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+            if (!Page.IsPostBack)
+            {
+                //txtCategoryName.Text = "Please enter a name.";
+            }
+
 
         }
 
         protected void btnAddCategory_Click(object sender, EventArgs e)
         {
-            pnlAddCategories.Visible = false;
+            //Response.Write("You entered " + txtCategoryName.Text);
+            if (Page.IsValid)
+            {
+                lblFeedback.Text = "You entered " + txtCategoryName.Text;
+                lblFeedback.Visible = true;
+            }
+
+            //if (txtCategoryName.Text.Trim() == "")
+            //{
+            //    lblFeedback.Text = "Please enter a name.";
+            //}
+            //else
+            //{
+            //    lblFeedback.Text = "You entered " + txtCategoryName.Text;
+            //}
+
+            //lblFeedback.Visible = true;
         }
     }
 }
