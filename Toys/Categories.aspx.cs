@@ -4,6 +4,8 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using System.Data.SqlClient;
+using System.Web.Configuration;
 
 namespace Toys
 {
@@ -24,20 +26,31 @@ namespace Toys
             //Response.Write("You entered " + txtCategoryName.Text);
             if (Page.IsValid)
             {
-                lblFeedback.Text = "You entered " + txtCategoryName.Text;
+                // 1. Create a SqlConnection object
+                SqlConnection conn = new SqlConnection();
+                conn.ConnectionString = WebConfigurationManager.ConnectionStrings["ToysConnectionString"].ConnectionString;
+
+                // 2. Create a SqlCommand object
+                SqlCommand cmd = new SqlCommand();
+
+                /// TODO:
+                /// We need to change the dynamci SQL statement later to avoid sql-inject attacks
+                cmd.CommandText = "INSERT INTO Categories VALUES('" + txtCategoryName.Text + "')";
+                cmd.Connection = conn;  // link the command object to the connection object
+
+                // 3. Open the connection
+                conn.Open();
+
+                // 4. Execute the command
+                cmd.ExecuteNonQuery();  // this will insert data into the database
+
+                // 5. Close the connection
+                conn.Close();
+
                 lblFeedback.Visible = true;
+                lblFeedback.Text = "The category <strong>" + txtCategoryName.Text + "</strong> was added successfully.";
             }
-
-            //if (txtCategoryName.Text.Trim() == "")
-            //{
-            //    lblFeedback.Text = "Please enter a name.";
-            //}
-            //else
-            //{
-            //    lblFeedback.Text = "You entered " + txtCategoryName.Text;
-            //}
-
-            //lblFeedback.Visible = true;
+            
         }
     }
 }
