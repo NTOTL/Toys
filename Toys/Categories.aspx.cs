@@ -6,6 +6,7 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Data.SqlClient;
 using System.Web.Configuration;
+using System.Data;
 
 namespace Toys
 {
@@ -15,12 +16,11 @@ namespace Toys
         {
             if (!Page.IsPostBack)
             {
-                //txtCategoryName.Text = "Please enter a name.";
+                BindCategoryList();
             }
 
-
         }
-
+        #region "This method will add a new category"
         protected void btnAddCategory_Click(object sender, EventArgs e)
         {
             //Response.Write("You entered " + txtCategoryName.Text);
@@ -49,8 +49,34 @@ namespace Toys
 
                 lblFeedback.Visible = true;
                 lblFeedback.Text = "The category <strong>" + txtCategoryName.Text + "</strong> was added successfully.";
+
+                BindCategoryList();
             }
             
+        }
+        #endregion
+
+        protected void BindCategoryList()
+        {
+            SqlConnection conn = new SqlConnection();
+            conn.ConnectionString = WebConfigurationManager.ConnectionStrings["ToysConnectionString"].ConnectionString;
+
+            // 2. Create a SqlCommand object
+            SqlCommand cmd = new SqlCommand();
+            cmd.CommandText = "SELECT * FROM Categories";
+            cmd.Connection = conn;
+
+            SqlDataAdapter sda = new SqlDataAdapter();
+            sda.SelectCommand = cmd;
+
+            DataTable dt = new DataTable();
+            conn.Open();
+
+            sda.Fill(dt);
+
+            gvCategoryList.DataSource = dt;
+            gvCategoryList.DataBind();
+            conn.Close();
         }
     }
 }
