@@ -52,7 +52,7 @@ namespace Toys
 
                 BindCategoryList();
             }
-            
+
         }
         #endregion
 
@@ -77,6 +77,120 @@ namespace Toys
             gvCategoryList.DataSource = dt;
             gvCategoryList.DataBind();
             conn.Close();
+        }
+
+
+
+        protected void gvCategoryList_RowDataBound(object sender, GridViewRowEventArgs e)
+        {
+            if (e.Row.RowType == DataControlRowType.DataRow)
+            {
+                Button editButton = e.Row.FindControl("btnEdit") as Button;
+                Button deleteButton = e.Row.FindControl("btnDelete") as Button;
+
+                editButton.CommandArgument = e.Row.Cells[0].Text;
+                deleteButton.CommandArgument = e.Row.Cells[0].Text;
+
+            }
+        }
+
+        protected void gvCategoryList_RowCommand(object sender, GridViewCommandEventArgs e)
+        {
+            int categoryId = 0;
+            if (e.CommandName == "EditCategory") // the Edit button was clicked
+            {
+                categoryId = int.Parse(e.CommandArgument.ToString());
+
+                EditCategoryById(categoryId);
+                lblCategoryId.Text = e.CommandArgument.ToString();
+
+            }
+            else if (e.CommandName == "DeleteCategory") // the Delete button was clicked
+            {
+                categoryId = int.Parse(e.CommandArgument.ToString());
+                using (SqlConnection conn = new SqlConnection())
+                {
+                    conn.ConnectionString = WebConfigurationManager.ConnectionStrings["ToysConnectionString"].ConnectionString;
+
+                    // 2. Create a SqlCommand object
+                    SqlCommand cmd = new SqlCommand();
+                    cmd.CommandText = "DELETE FROM Categories WHERE CategoryId = " + categoryId;
+                    cmd.Connection = conn;
+                    conn.Open();
+
+                    cmd.ExecuteNonQuery();
+
+                    BindCategoryList();
+                }   
+            }
+        }
+
+        private void EditCategoryById(int categoryId)
+        {
+            SqlConnection conn = new SqlConnection();
+            conn.ConnectionString = WebConfigurationManager.ConnectionStrings["ToysConnectionString"].ConnectionString;
+
+            // 2. Create a SqlCommand object
+            SqlCommand cmd = new SqlCommand();
+            cmd.CommandText = "SELECT * FROM Categories WHERE CategoryId = " + categoryId;
+            cmd.Connection = conn;
+            conn.Open();
+
+            SqlDataReader sdr = cmd.ExecuteReader();
+
+            if (sdr.Read())
+            {
+                txtCategoryName.Text = sdr["CategoryName"].ToString();
+            }
+
+            btnAddCategory.Visible = false;
+            btnSaveCategory.Visible = true;
+            btnCancel.Visible = true;
+            pnlCategoryList.Visible = false;
+        }
+
+        protected void btnCancel_Click(object sender, EventArgs e)
+        {
+            btnAddCategory.Visible = true;
+            btnSaveCategory.Visible = false;
+            btnCancel.Visible = false;
+            pnlCategoryList.Visible = true;
+            txtCategoryName.Text = "";
+        }
+
+        protected void btnSaveCategory_Click(object sender, EventArgs e)
+        {
+            int categoryId = int.Parse(lblCategoryId.Text);
+
+            SaveCategoryById(categoryId);
+        }
+
+        private void SaveCategoryById(int categoryId)
+        {
+            using (SqlConnection conn = new SqlConnection())
+            {
+                conn.ConnectionString = WebConfigurationManager.ConnectionStrings["ToysConnectionString"].ConnectionString;
+
+                // 2. Create a SqlCommand object
+                SqlCommand cmd = new SqlCommand();
+                ///TODO
+                /// we need to change the following statement to avoid
+                /// sql injection attacks
+                cmd.CommandText = "UPDATE Categories SET CategoryName='" + txtCategoryName.Text + "' WHERE CategoryId = " + categoryId;
+                cmd.Connection = conn;
+                conn.Open();
+
+                cmd.ExecuteNonQuery();
+
+                BindCategoryList();
+
+                btnAddCategory.Visible = true;
+                btnSaveCategory.Visible = false;
+                btnCancel.Visible = false;
+                pnlCategoryList.Visible = true;
+                txtCategoryName.Text = "";
+            }
+
         }
     }
 }
