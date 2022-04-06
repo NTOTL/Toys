@@ -6,10 +6,6 @@
         <h1>My Lovely Toys</h1>        
     </div>
 
-    <div class="row">
-        <asp:DataList ID="dlToys" runat="server" >
-
-        </asp:DataList>
-    </div>
+    
 
 </asp:Content>
