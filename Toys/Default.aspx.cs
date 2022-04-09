@@ -8,13 +8,42 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Text;
 
+
 namespace Toys
 {
     public partial class _Default : Page
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-           
+           if (!Page.IsPostBack)
+            {
+                using (SqlConnection conn = new SqlConnection())
+                {
+                    conn.ConnectionString = WebConfigurationManager.ConnectionStrings["ToysConnectionString"].ConnectionString;
+
+                    // 2. Create a SqlCommand object
+                    SqlCommand cmd = new SqlCommand();
+                    cmd.CommandText = "SELECT * FROM Products ORDER BY CategoryId";
+                    cmd.Connection = conn;
+                    conn.Open();
+
+                    SqlDataReader sdr = cmd.ExecuteReader();
+                    StringBuilder sb = new StringBuilder();
+
+                    if (sdr.HasRows)
+                    {
+                        while (sdr.Read())
+                        {
+                            sb.Append("<div class='col-lg-3'>");
+                            sb.Append("<img src='/Content/Catalog/Images/");
+                            sb.Append(sdr["ImagePath"].ToString());
+                            sb.Append("'>");
+                            sb.Append("</div>");
+                        }
+                    }
+                    lblToys.Text = sb.ToString();
+                }
+            }
         }
 
        

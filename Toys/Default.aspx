@@ -4,8 +4,12 @@
 
     <div class="jumbotron">
         <h1>My Lovely Toys</h1>        
-    </div>
+    </div>  
+    <div class="row">
+        <asp:Label ID="lblToys" runat="server">
 
+        </asp:Label>
+    </div>
     
 
 </asp:Content>
