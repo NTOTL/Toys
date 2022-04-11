@@ -1610,6 +1610,7 @@ pre code {
 .row {
   margin-right: -15px;
   margin-left: -15px;
+  margin-bottom: 2px;
 }
 .row-no-gutters {
   margin-right: 0;
@@ -4279,7 +4280,6 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
         height: auto !important;
         padding-bottom: 0;
         overflow: visible !important;
-        background-color: red;
     }
   .navbar-collapse.in {
     overflow-y: visible;
