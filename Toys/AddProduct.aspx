@@ -1,7 +1,7 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="AddProduct.aspx.cs" Inherits="Toys.AddProduct" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
     <h3>Add New Product</h3>
-    <div class="form-group">
+    <div class="form-group">        
         <label for="txtProductName">Product Name:</label>
         <asp:TextBox ID="txtProductName" runat="server" ClientIDMode="Static" CssClass="form-control"></asp:TextBox>
         <label for="txtProductDescription">Description:</label>

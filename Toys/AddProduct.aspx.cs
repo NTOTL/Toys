@@ -16,13 +16,21 @@ namespace Toys
         {
             if (!Page.IsPostBack)
             {
-                BindCategoryDDL();
+                if (Session["email"] != null)
+                {                    
+                    BindCategoryDDL();
+                }
+                else
+                {
+                    Response.Redirect("Signin.aspx");
+                }
+
             }
         }
 
         private void BindCategoryDDL()
         {
-            using(SqlConnection conn = new SqlConnection())
+            using (SqlConnection conn = new SqlConnection())
             {
                 conn.ConnectionString = WebConfigurationManager.ConnectionStrings["ToysConnectionString"].ConnectionString;
 
