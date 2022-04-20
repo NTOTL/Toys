@@ -51,8 +51,11 @@ namespace Toys
 
                 // 2. Create a SqlCommand object
                 SqlCommand cmd = new SqlCommand();
-                cmd.CommandText = "SELECT * FROM Users WHERE Email = '" + email +
-                    "' AND HashedPassword = '" + hashedPassword + "'";
+                //cmd.CommandText = "SELECT * FROM Users WHERE Email = '" + email +
+                //    "' AND HashedPassword = '" + hashedPassword + "'";
+                cmd.CommandText = "SELECT * FROM Users WHERE Email=@email AND HashedPassword=@hashedPassword";
+                cmd.Parameters.AddWithValue("@email", txtEmail.Text.Trim());
+                cmd.Parameters.AddWithValue("@hashedPassword", hashedPassword);
                 cmd.Connection = conn;
                 conn.Open();
 

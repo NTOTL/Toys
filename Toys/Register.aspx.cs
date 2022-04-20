@@ -49,8 +49,13 @@ namespace Toys
 #pragma warning restore CS0618 // Type or member is obsolete
                               // 2. Create a SqlCommand object
                 SqlCommand cmd = new SqlCommand();
-                cmd.CommandText = "INSERT INTO Users(Email, HashedPassword) VALUES('" + email + "', '" +
-                    hashedPassword + "')";
+                //cmd.CommandText = "INSERT INTO Users(Email, HashedPassword) VALUES('" + email + "', '" +
+                //    hashedPassword + "')";
+                //cmd.CommandText = "INSERT INTO Users(Email, HashedPassword) VALUES(@email, @hashedPassword)";
+                cmd.CommandText = "sp_AddUser";
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@email", txtEmail.Text.Trim());
+                cmd.Parameters.AddWithValue("@hashedPassword", hashedPassword);
                 cmd.Connection = conn;
                 conn.Open();
 
